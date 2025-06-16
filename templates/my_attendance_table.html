@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}My Attendance{% endblock %}
+
+{% block content %}
+<style>
+    .present-row {
+        background-color: rgba(13, 163, 13, 0.2); /* Light green */
+    }
+
+    .absent-row {
+        background-color: rgba(255, 0, 0, 0.2); /* Light red */
+    }
+
+    .default-row {
+        background-color: rgba(0, 0, 0, 0.05); /* Light grey */
+    }
+
+    .table th {
+        background-color: navy;
+        color: white;
+    }
+
+    .table td {
+        background-color: green;
+        color: black;
+    }
+</style>
+
+<div class="container mt-5">
+    <h2 class="text-center">My Attendance Records</h2>
+    <table class="table table-bordered mt-4">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Check In</th>
+                <th>Check Out</th>
+                <th>Status</th>
+                <th>Total Hours</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+                <tr class="{% if record.status == 'Present' %}present-row{% elif record.status == 'Absent' %}absent-row{% else %}default-row{% endif %}">
+                    <td>{{ record.date }}</td>
+                    <td>{{ record.check_in }}</td>
+                    <td>{{ record.check_out }}</td>
+                    <td>{{ record.status }}</td>
+                    <td>
+                        {% if record.hours_worked %}
+                            {{ record.hours_worked }} hrs
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No records found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
